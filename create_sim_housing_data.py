@@ -10,7 +10,12 @@ NUM_HOUSES_FROM_100000_TO_299999 = [(100000, 299999), 16150351]
 NUM_HOUSES_FROM_300000_TO_499999 = [(300000, 499999), 15444179]
 NUM_HOUSES_FROM_500000_TO_749999 = [(500000, 749999), 8913516]
 NUM_HOUSES_FROM_750000_TO_999999 = [(750000, 999999), 3960116]
-NUM_HOUSES_OVER_999999 = [(1000000, MOST_EXPENSIVE_HOUSE_PRICE), 3882676]
+NUM_HOUSES_FROM_1000000_TO_1499999 = [(1000000, 1499999), 2782676]
+NUM_HOUSES_FROM_1500000_TO_1749999 = [(1500000, 1749999), 500000]
+NUM_HOUSES_OVER_1749999 = [(1750000, 2999999), 390000]
+NUM_HOUSES_OVER_2999999 = [(3000000, 9999999), 100000]
+NUM_HOUSES_OVER_9999999 = [(10000000, 49999999), 9500]
+NUM_HOUSES_OVER_49999999 = [(50000000, MOST_EXPENSIVE_HOUSE_PRICE), 500]
 
 ## Generate house prices efficiently with NumPy
 
@@ -21,7 +26,7 @@ class HousePriceDataGenerator:
             raise TypeError("house_prices must be a list")
         if not all(isinstance(price, int) for price in house_prices):
             raise TypeError("All elements in house_prices must be integers")
-        
+        house_prices.sort()
         # initialize constants
         self.house_ranges_totals = [NUM_HOUSES_UNDER_50000,
                       NUM_HOUSES_FROM_50000_TO_99999,
@@ -29,7 +34,12 @@ class HousePriceDataGenerator:
                       NUM_HOUSES_FROM_300000_TO_499999,
                       NUM_HOUSES_FROM_500000_TO_749999,
                       NUM_HOUSES_FROM_750000_TO_999999,
-                      NUM_HOUSES_OVER_999999]
+                      NUM_HOUSES_FROM_1000000_TO_1499999,
+                      NUM_HOUSES_FROM_1500000_TO_1749999,
+                      NUM_HOUSES_OVER_1749999,
+                      NUM_HOUSES_OVER_2999999,
+                      NUM_HOUSES_OVER_9999999,
+                      NUM_HOUSES_OVER_49999999]
         
         # Initialize empty array
         self._house_prices = house_prices
@@ -43,6 +53,7 @@ class HousePriceDataGenerator:
                     price_range[0], price_range[1] + 1, size=num_houses, dtype=np.int32
                 )
                 self._house_prices.extend(rand_house_prices)
+        self._house_prices.sort()
         return self._house_prices
 
     @house_prices.setter
@@ -51,4 +62,5 @@ class HousePriceDataGenerator:
             raise TypeError("house_prices must be a list")
         if not all(isinstance(price, int) for price in val):
             raise TypeError("All elements in house_prices must be integers")
+        val.sort()
         self._house_prices = val
