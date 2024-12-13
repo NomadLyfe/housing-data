@@ -12,7 +12,7 @@ house_prices = house_market.house_prices
 plt.figure(figsize=(19, 9))
 plt.scatter(range(len(house_prices)), house_prices, color='blue', s=1)  # s=1 makes the points small
 # plt.xscale('log')
-plt.yscale('log')
+# plt.yscale('log')
 
 # Set labels and title
 plt.title('Scatter Plot of Housing Prices')

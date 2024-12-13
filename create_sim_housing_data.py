@@ -42,19 +42,22 @@ class HousePriceDataGenerator:
                       NUM_HOUSES_OVER_49999999]
         
         # Initialize empty array
-        self._house_prices = house_prices
+        self._house_prices = np.array(house_prices)
     
     @property
     def house_prices(self):
-        if not self._house_prices:
+        if self._house_prices.size == 0:
             for price_range, num_houses in self.house_ranges_totals:
                 # Generate random house prices within the range
                 rand_house_prices = np.random.randint(
                     price_range[0], price_range[1] + 1, size=num_houses, dtype=np.int32
                 )
-                self._house_prices.extend(rand_house_prices)
-        self._house_prices.sort()
-        return self._house_prices
+                log_rand_house_prices = np.log(rand_house_prices)
+                corr_rand_house_prices = log_rand_house_prices * ((15127188.177767897461941497007833 - 2019.4905985417228095571241466346)/51523067)
+                corr_rand_house_prices.sort()
+                self._house_prices = np.concatenate((self._house_prices, corr_rand_house_prices), axis=None)
+        print(self._house_prices.size)
+        return self._house_prices.tolist()
 
     @house_prices.setter
     def house_prices(self, val):
@@ -64,3 +67,14 @@ class HousePriceDataGenerator:
             raise TypeError("All elements in house_prices must be integers")
         val.sort()
         self._house_prices = val
+
+
+# 2019.4905985417228095571241466346
+# 15,127,188.177767897461941497007833
+
+# 51523068
+
+# (0, 2019.4905985417228095571241466346)
+# (51523067, 15,127,188.177767897461941497007833)
+
+# m = 15,127,188.177767897461941497007833 - 2019.4905985417228095571241466346 / 51523067 - 0
