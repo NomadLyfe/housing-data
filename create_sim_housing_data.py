@@ -47,15 +47,15 @@ class HousePriceDataGenerator:
     @property
     def house_prices(self):
         if self._house_prices.size == 0:
+            prev_num_house = 0
             for price_range, num_houses in self.house_ranges_totals:
                 # Generate random house prices within the range
                 rand_house_prices = np.random.randint(
                     price_range[0], price_range[1] + 1, size=num_houses, dtype=np.int32
                 )
-                log_rand_house_prices = np.log(rand_house_prices)
-                corr_rand_house_prices = log_rand_house_prices * ((15127188.177767897461941497007833 - 2019.4905985417228095571241466346)/51523067)
-                corr_rand_house_prices.sort()
-                self._house_prices = np.concatenate((self._house_prices, corr_rand_house_prices), axis=None)
+                rand_house_prices.sort()
+                self._house_prices = np.concatenate((self._house_prices, rand_house_prices), axis=None)
+                prev_num_house += num_houses
         print(self._house_prices.size)
         return self._house_prices.tolist()
 
@@ -69,12 +69,13 @@ class HousePriceDataGenerator:
         self._house_prices = val
 
 
-# 2019.4905985417228095571241466346
-# 15,127,188.177767897461941497007833
-
-# 51523068
-
 # (0, 2019.4905985417228095571241466346)
 # (51523067, 15,127,188.177767897461941497007833)
 
 # m = 15,127,188.177767897461941497007833 - 2019.4905985417228095571241466346 / 51523067 - 0
+# m = 0.29356110899161642957186418820305
+# b = 2019.4905985417228095571241466346
+# y = 0.29356110899161642957186418820305 * x + 2019.4905985417228095571241466346
+
+# m = (15127188.177767897461941497007833 - 2019.4905985417228095571241466346)/51523067
+# nult = (0.29356110899161642957186418820305 * indices) + 2019.4905985417228095571241466346
